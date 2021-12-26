@@ -7,6 +7,9 @@ kind: Cluster
 metadata:
   name: topolovec.cluster.com.k8s.local
 spec:
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://kops-topolovec-iam/oidc
+    enableAWSOIDCProvider: true
   api:
     loadBalancer:
       class: Classic
@@ -34,6 +37,12 @@ spec:
   iam:
     allowContainerRegistry: true
     legacy: false
+    serviceAccountExternalPermissions:
+      - name: aws-cluster-autoscaler
+        namespace: kube-system
+        aws:
+          policyARNs:
+            - arn:aws:iam::078867227722:policy/cluster_autoscaler_policy_topolovec
   kubelet:
     anonymousAuth: false
   kubernetesApiAccess:
@@ -44,7 +53,8 @@ spec:
   masterPublicName: api.topolovec.cluster.com.k8s.local
   networkCIDR: 172.20.0.0/16
   networking:
-    kubenet: {}
+    flannel:
+      backend: vxlan
   nonMasqueradeCIDR: 100.64.0.0/10
   sshAccess:
   - 0.0.0.0/0
