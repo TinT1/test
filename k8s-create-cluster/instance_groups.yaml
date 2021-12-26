@@ -7,9 +7,9 @@ metadata:
   name: master-eu-west-1a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20211118
-  instanceMetadata:
-    httpPutResponseHopLimit: 3
-    httpTokens: required
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: true
+    k8s.io/cluster-autoscaler/topolovec.cluster.com.k8s.local: ""
   machineType: t3.small
   maxSize: 1
   minSize: 1
@@ -29,9 +29,9 @@ metadata:
   name: nodes-eu-west-1a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20211118
-  instanceMetadata:
-    httpPutResponseHopLimit: 1
-    httpTokens: required
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: true
+    k8s.io/cluster-autoscaler/topolovec.cluster.com.k8s.local: ""
   machineType: t3.micro
   maxSize: 1
   minSize: 1
