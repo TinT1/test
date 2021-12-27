@@ -41,3 +41,27 @@ spec:
   subnets:
   - eu-central-1a
 
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: topolovec.cluster.com.k8s.local
+  name: argo
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20211118
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: "true"
+    k8s.io/cluster-autoscaler/topolovec.cluster.com.k8s.local: ""
+  machineType: t3.micro
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: argo
+  role: Node
+  subnets:
+  - eu-central-1a
+  taints:
+  - dedicated=argo:NoSchedule
+
