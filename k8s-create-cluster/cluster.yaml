@@ -8,7 +8,7 @@ metadata:
   name: topolovec.cluster.com.k8s.local
 spec:
   serviceAccountIssuerDiscovery:
-    discoveryStore: s3://kops-topolovec-iam/oidc
+    discoveryStore: s3://kops-topolovec-cluster-iam/oidc
     enableAWSOIDCProvider: true
   api:
     loadBalancer:
@@ -18,19 +18,19 @@ spec:
     rbac: {}
   channel: stable
   cloudProvider: aws
-  configBase: s3://topolovec-kops-cluster/topolovec.cluster.com.k8s.local
+  configBase: s3://kops-topolovec-cluster/topolovec.cluster.com.k8s.local
   etcdClusters:
   - cpuRequest: 200m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-eu-west-1a
+      instanceGroup: master-eu-central-1a
       name: a
     memoryRequest: 100Mi
     name: main
   - cpuRequest: 100m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-eu-west-1a
+      instanceGroup: master-eu-central-1a
       name: a
     memoryRequest: 100Mi
     name: events
@@ -61,9 +61,9 @@ spec:
   - ::/0
   subnets:
   - cidr: 172.20.32.0/19
-    name: eu-west-1a
+    name: eu-central-1a
     type: Public
-    zone: eu-west-1a
+    zone: eu-central-1a
   topology:
     dns:
       type: Public
