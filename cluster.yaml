@@ -1,0 +1,84 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: topolovec.cluster.com.k8s.local
+spec:
+  api:
+    loadBalancer:
+      class: Classic
+      type: Public
+  authorization:
+    rbac: {}
+  awsLoadBalancerController:
+    enabled: true
+  certManager:
+    enabled: true
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://kops-topolovec-cluster/topolovec.cluster.com.k8s.local
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-eu-central-1a
+      name: a
+    manager:
+      env:
+      - name: ETCD_LISTEN_METRICS_URLS
+        value: http://0.0.0.0:8081
+      - name: ETCD_METRICS
+        value: basic
+    name: main
+    provider: Manager
+  - etcdMembers:
+    - instanceGroup: master-eu-central-1a
+      name: a
+    name: events
+    provider: Manager
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+    serviceAccountExternalPermissions:
+      - aws:
+          policyARNs:
+            - arn:aws:iam::078867227722:policy/cluster_autoscaler_policy_topolovec
+        name: aws-cluster-autoscaler
+        namespace: kube-system
+  kubeAPIServer:
+    eventTTL: 8h0m0s
+  kubeDNS:
+    provider: CoreDNS
+  kubeProxy:
+    metricsBindAddress: 0.0.0.0
+  kubelet:
+    anonymousAuth: false
+    authenticationTokenWebhook: true
+    authorizationMode: Webhook
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.24.2
+  masterInternalName: api.internal.topolovec.cluster.com.k8s.local
+  masterPublicName: api.topolovec.cluster.com.k8s.local
+  networkCIDR: 172.20.0.0/16
+  networking:
+    flannel:
+      backend: vxlan
+  nonMasqueradeCIDR: 100.64.0.0/10
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://kops-topolovec-cluster-iam/oidc
+    enableAWSOIDCProvider: true
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: eu-central-1a
+    type: Private
+    zone: eu-central-1a
+  - cidr: 172.20.0.0/22
+    name: utility-eu-central-1a
+    type: Utility
+    zone: eu-central-1a
+  topology:
+    dns:
+      type: Public
+    masters: private
+    nodes: private
